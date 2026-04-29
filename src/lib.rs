@@ -33,6 +33,7 @@ pub fn games() -> PyResult<Vec<Game>> {
             .iter().map(|dict| -> PyResult<Game> {
                 let map: HashMap<String, Py<PyAny>> = dict.extract(py)?;
 
+                // the `playtime` stat is in float format, with the whole part being the hours
                 let playtime = map.get("playtime").unwrap()
                     .extract::<f32>(py)
                     .map(|playtime| {
@@ -41,7 +42,8 @@ pub fn games() -> PyResult<Vec<Game>> {
                         Duration::from_secs_f32(hours * 3600. + minutes * 60.)
                     })
                     .ok();
-                let last_played = map.get("last_played").unwrap() // 
+                // the `last_played` stat is a timestamp in seconds
+                let last_played = map.get("last_played").unwrap()
                     .extract::<u32>(py)
                     .map(|timestamp| DateTime::from_timestamp_secs(timestamp as i64).unwrap())
                     .ok();
@@ -57,7 +59,6 @@ pub fn games() -> PyResult<Vec<Game>> {
                     last_played,
                     ..Default::default()
                 })
-                
             })
             .collect::<PyResult<Vec<_>>>()?;
 
