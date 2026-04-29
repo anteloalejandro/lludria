@@ -12,16 +12,16 @@ Because of this, [your python installation *needs* a shared library][python-from
 
 ## TO-DO
 
-- [ ] Aggregate game data into a single python `dict[str, Any]`
+- [x] Aggregate game data into a single python `dict[str, Any]`
   - [x] Id
   - [x] Name and slug
-  - [ ] Platform / runner
+  - [x] Platform / runner
   - [x] Playtime and Last Played
   - [x] Cover, banner and icon path
-  - [ ] Category
   - [x] Run command
 - [x] Track currently running games
 - [x] Stop running games
+- [ ] Categories
 - [ ] Search games
 
 ## *TO-MAYBE-DO*

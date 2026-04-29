@@ -1,10 +1,11 @@
+import json
 import os
 from typing import Any
 import gi
 gi.require_version("Gtk", "3.0")
 
 from lutris.database import games
-from lutris import settings
+from lutris import settings, runners
 
 covers = os.listdir(settings.COVERART_PATH)
 banners = os.listdir(settings.BANNER_PATH)
@@ -46,6 +47,7 @@ def dict_to_game(d: dict[str, Any]):
         "cover": img_paths.get("cover"),
         "banner": img_paths.get("banner"),
         "icon": img_paths.get("icon"),
+        "runner": d["runner"], # is always set IF the game is installed
         "run_command": f"lutris lutris:rungameid/{d['id']}",
     }
 

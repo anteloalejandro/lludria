@@ -43,7 +43,70 @@ pub fn games() -> PyResult<Vec<Game>> {
     Ok(games)
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
+pub enum Platform {
+    // PC
+    LINUX, WINDOWS, DOS, STEAM,
+    // NINTENDO
+    SWITCH, WIIU, THREEDS, WIIGC, GBA, N64, SNES, GB, NES,
+    // PLAYSTATION
+    PSVITA, PS4, PSP, PS3, PS2, PS1,
+    // XBOX
+    XBOX360, XBOX,
+    // SEGA
+    DREAMCAST,
+    // OTHER
+    ATARI, RETROARCH, WEB, UNKNOWN
+}
+impl Platform {
+    /// Maps known runners into known platforms
+    fn from_runner(runner: &str) -> Self {
+        use Platform::*;
+
+        // TODO: Fix missing mappings (currently set to `UNKNOWN`)
+        match runner {
+            "atari800" => ATARI,
+            "azahar" => THREEDS,
+            "cemu" => WIIU,
+            "dolphin" => WIIGC,
+            "dosbox" => DOS,
+            "duckstation" => PS1,
+            "easyrpg" => UNKNOWN,
+            "flatpak" => LINUX,
+            "fsuae" => UNKNOWN,
+            "hatari" => ATARI,
+            "jzintv" => UNKNOWN,
+            "libretro" => RETROARCH,
+            "linux" => LINUX,
+            "mame" => UNKNOWN,
+            "mednafen" => UNKNOWN,
+            "mupen64plus" => N64,
+            "o2em" => UNKNOWN,
+            "osmose" => UNKNOWN,
+            "pcsx2" => PS2,
+            "pico8" => UNKNOWN,
+            "redream" => DREAMCAST,
+            "reicast" => DREAMCAST,
+            "rpcs3" => PS3,
+            "ryujinx" => SWITCH,
+            "scummvm" => UNKNOWN,
+            "shadps4" => PS4,
+            "snes9x" => SNES,
+            "steam" => STEAM,
+            "vice" => UNKNOWN,
+            "vita3k" => PSVITA,
+            "web" => WEB,
+            "wine" => WINDOWS,
+            "xemu" => XBOX,
+            "xenia" => XBOX360,
+            "yuzu" => SWITCH,
+            "zdoom" => UNKNOWN,
+            _ => UNKNOWN
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct Game {
     pub id: i32,
     pub name: String,
@@ -53,6 +116,7 @@ pub struct Game {
     pub icon: Option<PathBuf>,
     pub playtime: Option<Duration>,
     pub last_played: Option<DateTime<Utc>>,
+    pub platform: Platform,
     pub run_command: String,
     pub running_process: Option<Child>
 }
@@ -75,6 +139,10 @@ impl Game {
             .map(|timestamp| DateTime::from_timestamp_secs(timestamp as i64).unwrap())
             .ok();
 
+        let platform = Platform::from_runner(
+            map.get("runner").unwrap().extract(py)?
+        );
+
         Ok(Game {
             id: map.get("id").unwrap().extract(py)?,
             name: map.get("name").unwrap().extract(py)?,
@@ -84,6 +152,7 @@ impl Game {
             icon: map.get("icon").unwrap().extract(py)?,
             playtime,
             last_played,
+            platform,
             run_command: map.get("run_command").unwrap().extract(py)?,
             running_process: None
         })
