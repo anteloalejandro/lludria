@@ -16,7 +16,7 @@ Because of this, [your python installation *needs* a shared library](https://git
   - [x] Id
   - [x] Name and slug
   - [ ] Platform / runner
-  - [ ] Playtime and Last Played
+  - [x] Playtime and Last Played
   - [ ] Cover, banner and icon path
   - [ ] Run command
 - [ ] A way to track currently running games
