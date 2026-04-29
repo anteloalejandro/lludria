@@ -1,6 +1,7 @@
+//! # INFO
+//! <https://github.com/PyO3/pyo3#using-python-from-rust>
+
 use std::collections::HashMap;
-/// # INFO
-/// <https://github.com/PyO3/pyo3#using-python-from-rust>
 use std::{ffi::CStr, path::PathBuf, time::Duration};
 use pyo3::ffi::c_str;
 use pyo3::prelude::*;
@@ -13,7 +14,7 @@ static WRAPPER: &CStr = c_str!(include_str!(concat!(
     "/wrapper.py"
 )));
 
-fn games() -> PyResult<Vec<Game>> {
+pub fn games() -> PyResult<Vec<Game>> {
     let games: Vec<Game> = Python::attach(|py| {
         let module = PyModule::from_code(
             py,
@@ -47,17 +48,17 @@ fn games() -> PyResult<Vec<Game>> {
 }
 
 #[derive(Debug, Default)]
-struct Game {
-    id: i32,
-    name: String,
-    slug: String,
-    cover: Option<PathBuf>,
-    banner: Option<PathBuf>,
-    icon: Option<PathBuf>,
-    playtime: Option<Duration>,
-    last_played: Option<Duration>,
-    run_command: Option<String>,
-    is_running: bool
+pub struct Game {
+    pub id: i32,
+    pub name: String,
+    pub slug: String,
+    pub cover: Option<PathBuf>,
+    pub banner: Option<PathBuf>,
+    pub icon: Option<PathBuf>,
+    pub playtime: Option<Duration>,
+    pub last_played: Option<Duration>,
+    pub run_command: Option<String>,
+    pub is_running: bool
 }
 
 #[cfg(test)]
