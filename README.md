@@ -19,8 +19,9 @@ Because of this, [your python installation *needs* a shared library][python-from
   - [x] Playtime and Last Played
   - [x] Cover, banner and icon path
   - [ ] Category
-  - [ ] Run command
-- [ ] A way to track currently running games
+  - [x] Run command
+- [x] A way to track currently running games
+  - [ ] Handle processes spawned by lutris replacing currently running process
 - [ ] Search games
 
 ## *TO-MAYBE-DO*
