@@ -4,7 +4,9 @@
 use std::collections::HashMap;
 use std::io;
 use std::process::{Child, ChildStderr, ChildStdout, Command};
+use std::os::unix::process::CommandExt;
 use std::{ffi::CStr, path::PathBuf, time::Duration};
+use libc::SIGKILL;
 use pyo3::ffi::c_str;
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
@@ -95,7 +97,11 @@ impl Game {
 
         let mut command_parts = self.run_command.split_whitespace();
         let mut command = Command::new(command_parts.next().expect("command must not be empty"));
-        let command = command.args(command_parts);
+        let command = command
+            .args(command_parts)
+            // NOTE: `process_group(0)` sets the PGID equal to the PID of the spawned command.
+            // This allows to kill this process and all of its descendants with `killpg`
+            .process_group(0); 
 
         self.running_process = Some(command.spawn()?);
 
@@ -109,6 +115,10 @@ impl Game {
         let Some(mut process) = self.running_process.take() else {
             return Ok((None, None)) 
         };
+        // # NOTE: `killpg` kills the process and all its descendants
+        // instead of leaving them orphaned, which would them running
+        // # TODO: Find a better way to do this, ideally with safe rust
+        unsafe { libc::killpg(process.id() as i32, SIGKILL); }
         process.kill()?;
         Ok((process.stdout, process.stderr))
     }
