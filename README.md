@@ -8,16 +8,17 @@ Rust Interface for running and managing Lutris games.
 
 This crate uses `pyO3` to run [wrapper.py](wrapper.py), which calls to Lutris' native python functions, which is significantly faster than calling the `lutris` cli tool.
 
-Because of this, [your python installation *needs* a shared library](https://github.com/PyO3/pyo3#using-python-from-rust).
+Because of this, [your python installation *needs* a shared library][python-from-rust].
 
 ## TO-DO
 
-- [ ] Aggregate game data into a single python dict
+- [ ] Aggregate game data into a single python `dict[str, Any]`
   - [x] Id
   - [x] Name and slug
   - [ ] Platform / runner
   - [x] Playtime and Last Played
   - [x] Cover, banner and icon path
+  - [ ] Category
   - [ ] Run command
 - [ ] A way to track currently running games
 - [ ] Search games
@@ -27,3 +28,10 @@ Because of this, [your python installation *needs* a shared library](https://git
 - [ ] Manage settings
 - [ ] Uninstall / Hide games
 - [ ] Add locally installed games
+
+## Acknowledgements
+
+This project is heavily inspired by how [`lutris-gamepad-ui`][lutris-gamepad-ui] handles the interop between Lutris' python code and JavaScript.
+
+[lutris-gamepad-ui]: https://github.com/andrew-ld/lutris-gamepad-ui
+[python-from-rust]: https://github.com/PyO3/pyo3#using-python-from-rust
