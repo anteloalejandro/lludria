@@ -50,6 +50,9 @@ pub fn games() -> PyResult<Vec<Game>> {
                     id: map.get("id").unwrap().extract(py)?,
                     name: map.get("name").unwrap().extract(py)?,
                     slug: map.get("slug").unwrap().extract(py)?,
+                    cover: map.get("cover").unwrap().extract(py)?,
+                    banner: map.get("banner").unwrap().extract(py)?,
+                    icon: map.get("icon").unwrap().extract(py)?,
                     playtime,
                     last_played,
                     ..Default::default()
