@@ -46,7 +46,7 @@ def dict_to_game(d: dict[str, Any]):
         "cover": img_paths.get("cover"),
         "banner": img_paths.get("banner"),
         "icon": img_paths.get("icon"),
-        "run_command": None,
+        "run_command": f"lutris lutris:rungameid/{d['id']}",
     }
 
 def get_games():

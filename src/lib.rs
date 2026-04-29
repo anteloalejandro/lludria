@@ -57,7 +57,7 @@ pub fn games() -> PyResult<Vec<Game>> {
                     icon: map.get("icon").unwrap().extract(py)?,
                     playtime,
                     last_played,
-                    ..Default::default()
+                    run_command: map.get("run_command").unwrap().extract(py)?
                 })
             })
             .collect::<PyResult<Vec<_>>>()?;
@@ -79,7 +79,6 @@ pub struct Game {
     pub playtime: Option<Duration>,
     pub last_played: Option<DateTime<Utc>>,
     pub run_command: Option<String>,
-    pub is_running: bool
 }
 
 #[cfg(test)]
