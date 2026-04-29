@@ -6,6 +6,10 @@ gi.require_version("Gtk", "3.0")
 from lutris.database import games
 from lutris import settings
 
+covers = os.listdir(settings.COVERART_PATH)
+banners = os.listdir(settings.BANNER_PATH)
+icons = os.listdir(settings.ICON_PATH)
+
 def find_basename(haystack: list[str], needle: str):
     for filename in haystack:
         basename = filename[:filename.rfind(".")]
@@ -15,10 +19,6 @@ def find_basename(haystack: list[str], needle: str):
 
 
 def find_img_paths(game_slug: str):
-    covers = os.listdir(settings.COVERART_PATH)
-    banners = os.listdir(settings.BANNER_PATH)
-    icons = os.listdir(settings.ICON_PATH)
-
     cover = find_basename(covers, game_slug)
     if cover: cover = f"{settings.COVERART_PATH}/{cover}"
 
@@ -48,7 +48,6 @@ def dict_to_game(d: dict[str, Any]):
         "icon": img_paths.get("icon"),
         "run_command": None,
     }
-
 
 def get_games():
     xs: list[dict[str, Any]] = games.get_games(filters={"installed": 1})
