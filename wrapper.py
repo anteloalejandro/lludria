@@ -1,11 +1,10 @@
-import json
 import os
 from typing import Any
 import gi
 gi.require_version("Gtk", "3.0")
 
 from lutris.database import games
-from lutris import settings, runners
+from lutris import settings
 
 covers = os.listdir(settings.COVERART_PATH)
 banners = os.listdir(settings.BANNER_PATH)
@@ -17,7 +16,6 @@ def find_basename(haystack: list[str], needle: str):
         if basename == needle:
             return filename
     return None
-
 
 def find_img_paths(game_slug: str):
     cover = find_basename(covers, game_slug)

@@ -24,6 +24,8 @@ Because of this, [your python installation *needs* a shared library][python-from
 - [ ] Categories
 - [ ] Search games
 
+*Running and stopping games does not work properly if there is a Lutris instance opened*
+
 ## *TO-MAYBE-DO*
 
 - [ ] Manage settings

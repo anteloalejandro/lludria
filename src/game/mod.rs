@@ -92,7 +92,7 @@ impl Game {
         // instead of leaving them orphaned, which would them running
         // # TODO: Find a better way to do this, ideally with safe rust
         unsafe { libc::killpg(process.id() as i32, libc::SIGKILL); }
-        process.kill()?;
+        process.kill()?; // call `kill` just in case
         Ok((process.stdout, process.stderr))
     }
 
