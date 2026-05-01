@@ -18,6 +18,8 @@ impl Platform {
     /// Maps known runners into known platforms.
     ///
     /// See [`Platform`].
+    ///
+    /// *There are currently some platforms incorrectly marked as `Unknown`*.
     pub fn from_runner(runner: &str) -> Self {
         use Platform::*;
 

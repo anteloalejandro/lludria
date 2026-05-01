@@ -36,5 +36,6 @@ Because of this, [your python installation *needs* a shared library][python-from
 
 This project is heavily inspired by how [`lutris-gamepad-ui`][lutris-gamepad-ui] handles the interop between Lutris' python code and JavaScript.
 
+<!-- LINKS -->
 [lutris-gamepad-ui]: https://github.com/andrew-ld/lutris-gamepad-ui
 [python-from-rust]: https://github.com/PyO3/pyo3#using-python-from-rust

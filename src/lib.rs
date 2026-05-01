@@ -1,44 +1,19 @@
-//! # INFO
-//! <https://github.com/PyO3/pyo3#using-python-from-rust>
-
-use std::ffi::CStr;
-use pyo3::ffi::c_str;
-use pyo3::prelude::*;
-use pyo3::types::PyDict;
+//! A rust library to interact with lutris games.
+//!
+//! # About `lutris` and `python`
+//!
+//! This library acts as a bridge between Lutris' python modules and methods, and Rust.
+//!
+//! Thus, it requires a python shared library that can "see" your lutris installation.
+//!
+//! For more information on Python-to-Rust interop check [the pyO3's manual section on the
+//! matter][pyo3-python-to-rust].
+//!
+//! [pyo3-python-to-rust]: https://github.com/PyO3/pyo3#using-python-from-rust
 
 mod game;
-use game::Game;
-
-const WRAPPER_MODULE: &CStr = c"wrapper";
-const WRAPPER_FILENAME: &CStr = c"wrapper.py";
-static WRAPPER: &CStr = c_str!(include_str!(concat!(
-    env!("CARGO_MANIFEST_DIR"),
-    "/wrapper.py"
-)));
-
-pub fn games() -> PyResult<Vec<Game>> {
-    let games: Vec<Game> = Python::attach(|py| {
-        let module = PyModule::from_code(
-            py,
-            WRAPPER,
-            WRAPPER_FILENAME,
-            WRAPPER_MODULE
-        )?;
-        let method: Py<PyAny> = module
-            .getattr("get_games")?
-            .into();
-
-        let result: Vec<Py<PyDict>> = method.call0(py)?.extract(py)?;
-
-        let games = result
-            .into_iter().map(|dict| Game::from_py_dict(py, dict))
-            .collect::<PyResult<Vec<_>>>()?;
-
-        PyResult::Ok(games)
-    })?;
-
-    Ok(games)
-}
+pub use game::Game;
+pub use game::Platform;
 
 #[cfg(test)]
 mod test {
@@ -46,6 +21,6 @@ mod test {
 
     #[test]
     fn get_games() {
-        dbg!(games().unwrap());
+        dbg!(Game::installed().unwrap());
     }
 }
