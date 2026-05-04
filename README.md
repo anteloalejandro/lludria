@@ -21,7 +21,7 @@ Because of this, [your python installation *needs* a shared library][python-from
   - [x] Run command
 - [x] Track currently running games
 - [x] Stop running games
-- [ ] Categories
+- [x] Categories
 - [ ] Search games
 
 *Running and stopping games does not work properly if there is a Lutris instance opened*

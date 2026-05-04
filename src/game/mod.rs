@@ -40,6 +40,8 @@ pub struct Game {
     pub playtime: Option<Duration>,
     /// Timestamp of the last time played.
     pub last_played: Option<DateTime<Utc>>,
+    /// List of categories the game belongs to. The category used for hidden games is `.hidden` .
+    pub categories: Vec<String>,
     /// Platform the game runs on, based on its runner.
     pub platform: Platform,
     /// Command to execute the game. Currently based on the lutris cli.
@@ -115,6 +117,7 @@ impl Game {
             playtime,
             last_played,
             platform,
+            categories: map.get("categories").unwrap().extract(py)?,
             run_command: map.get("run_command").unwrap().extract(py)?,
             running_process: None
         })

@@ -3,7 +3,7 @@ from typing import Any
 import gi
 gi.require_version("Gtk", "3.0")
 
-from lutris.database import games
+from lutris.database import games, categories
 from lutris import settings
 
 covers = os.listdir(settings.COVERART_PATH)
@@ -42,9 +42,10 @@ def dict_to_game(d: dict[str, Any]):
         "slug": d["slug"],
         "playtime": d.get("playtime"), # hours represented as a float
         "last_played": d.get("lastplayed"), # date as a timestamp
-        "cover": d.get("cover") or img_paths.get("cover"),
+        "cover": img_paths.get("cover"),
         "banner": img_paths.get("banner"),
         "icon": img_paths.get("icon"),
+        "categories": categories.get_categories_in_game(d["id"]),
         "runner": d["runner"], # is always set IF the game is installed
         "run_command": f"lutris lutris:rungameid/{d['id']}",
     }
