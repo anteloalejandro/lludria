@@ -12,6 +12,7 @@ use pyo3::types::PyDict;
 use chrono::{DateTime, Utc};
 
 mod platform;
+
 pub use platform::Platform;
 
 const WRAPPER_MODULE: &CStr = c"wrapper";

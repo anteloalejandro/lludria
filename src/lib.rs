@@ -14,6 +14,8 @@
 mod game;
 pub use game::Game;
 pub use game::Platform;
+pub use pyo3::PyResult;
+pub use pyo3::PyErr;
 
 #[cfg(test)]
 mod test {

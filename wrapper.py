@@ -42,7 +42,7 @@ def dict_to_game(d: dict[str, Any]):
         "slug": d["slug"],
         "playtime": d.get("playtime"), # hours represented as a float
         "last_played": d.get("lastplayed"), # date as a timestamp
-        "cover": img_paths.get("cover"),
+        "cover": d.get("cover") or img_paths.get("cover"),
         "banner": img_paths.get("banner"),
         "icon": img_paths.get("icon"),
         "runner": d["runner"], # is always set IF the game is installed
