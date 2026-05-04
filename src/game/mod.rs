@@ -1,8 +1,10 @@
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::ffi::CStr;
 use std::io;
 use std::process::{Child, ChildStderr, ChildStdout, Command};
 use std::os::unix::process::CommandExt;
+use std::rc::Rc;
 use std::{path::PathBuf, time::Duration};
 use pyo3::ffi::c_str;
 use pyo3::prelude::*;
@@ -19,7 +21,7 @@ static WRAPPER: &CStr = c_str!(include_str!(concat!(
     "/wrapper.py"
 )));
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Game {
     /// Game ID, managed automatically by lutris.
     pub id: i32,
@@ -45,7 +47,7 @@ pub struct Game {
     ///
     /// *If another Lutris instance was already opened, all children of the running process are
     /// managed by said instance and this running process is closed (thus, set to `None`) automatically.*
-    pub running_process: Option<Child>
+    running_process: Option<Rc<RefCell<Child>>>
 }
 impl Game {
     /// Get a list of installed games.
@@ -131,7 +133,7 @@ impl Game {
             // This allows to kill this process and all of its descendants with `killpg`
             .process_group(0); 
 
-        self.running_process = Some(command.spawn()?);
+        self.running_process = Some(Rc::new(RefCell::new(command.spawn()?)));
 
         Ok(())
     }
@@ -144,15 +146,17 @@ impl Game {
     ///
     /// See [`Game::running_process`] for more information.
     pub fn stop(&mut self) -> io::Result<(Option<ChildStdout>, Option<ChildStderr>)> {
-        let Some(mut process) = self.running_process.take() else {
+        let Some(process) = self.running_process.take() else {
             return Ok((None, None)) 
         };
+
+        let mut process = process.borrow_mut();
         // # NOTE: `killpg` kills the process and all its descendants
         // instead of leaving them orphaned, which would them running
         // # TODO: Find a better way to do this, ideally with safe rust
         unsafe { libc::killpg(process.id() as i32, libc::SIGKILL); }
         process.kill()?; // call `kill` just in case
-        Ok((process.stdout, process.stderr))
+        Ok((process.stdout.take(), process.stderr.take()))
     }
 
     /// Check if the game is currently running.
